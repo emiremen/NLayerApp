@@ -39,7 +39,7 @@ builder.Services.AddHttpClient<CategoryApiService>(opt =>
     opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
 });
 
-builder.Services.AddScoped(typeof(NotFoundFilter<>));
+builder.Services.AddScoped(typeof(NotFoundFilter<,>));
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));

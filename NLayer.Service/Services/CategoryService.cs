@@ -12,14 +12,12 @@ using System.Threading.Tasks;
 
 namespace NLayer.Service.Services
 {
-    public class CategoryService : Service<Category>, ICategoryService
+    public class CategoryService : Service<Category, CategoryDto>, ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-        public CategoryService(IGenericRepository<Category> repository, IUnitOfWork unitOfWork, ICategoryRepository categoryRepository, IMapper mapper) : base(repository, unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, ICategoryRepository categoryRepository,  IGenericRepository<Category> repository) : base(repository, unitOfWork)
         {
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
         public async Task<CustomResponseDto<CategoryWithProductsDto>> GetSingleCategoryWithProductsAsync(int categoryId)

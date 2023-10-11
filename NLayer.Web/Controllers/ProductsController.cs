@@ -50,7 +50,7 @@ namespace NLayer.Web.Controllers
 
         }
 
-        [ServiceFilter(typeof(NotFoundFilter<Product>))]
+        [ServiceFilter(typeof(NotFoundFilter<Product,ProductDto>))]
         public async Task<IActionResult> Update(int id)
         {
             var product = await _productApiService.GetByIdAsync(id);

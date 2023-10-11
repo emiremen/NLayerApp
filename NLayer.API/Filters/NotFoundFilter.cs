@@ -6,14 +6,9 @@ using NLayer.Core.Services;
 
 namespace NLayer.API.Filters
 {
-    public class NotFoundFilter<T> : IAsyncActionFilter where T : BaseEntity
+    public class NotFoundFilter<TEntity, TDto> : IAsyncActionFilter where TEntity : BaseEntity where TDto : BaseDto
     {
-        private readonly IService<T> _service;
-        public NotFoundFilter(IService<T> service)
-        {
-            _service = service;
-        }
-
+        private readonly IService<TEntity, TDto> _service;
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var idValue = context.ActionArguments.Values.FirstOrDefault();
@@ -25,12 +20,12 @@ namespace NLayer.API.Filters
 
             var id = (int)idValue;
             var anyEntity = await _service.AnyAsync(x => x.Id == id);
-            if (anyEntity)
+            if (anyEntity.Data)
             {
                 await next.Invoke();
                 return;
             }
-            context.Result = new NotFoundObjectResult(CustomResponseDto<NoContentDto>.Fail(404, $"{typeof(T).Name} with ({id}) not found!"));
+            context.Result = new NotFoundObjectResult(CustomResponseDto<NoContentDto>.Fail(404, $"{typeof(TEntity).Name} with ({id}) not found!"));
         }
     }
 }
